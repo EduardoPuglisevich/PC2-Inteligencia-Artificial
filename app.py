@@ -7,8 +7,20 @@ from skimage.transform import resize
 import numpy as np
 import random as rd
 from tensorflow.keras.models import load_model
+import gdown
+
+# Reemplaza el enlace con el enlace de descarga directa de tu archivo en Google Drive
+enlace_google_drive = "https://drive.google.com/uc?id=18WnNN9Qk1oRH2F7d9ojBAsQLcKGiN6ks"
+# Especifica el nombre del archivo local
+nombre_archivo_local = "modelo_entrenado.h5"
+
+# Realiza la solicitud para descargar el archivo
+response = gdown.download(enlace_google_drive, nombre_archivo_local, quiet=False)
+
+# Verifica si la descarga fue exitosa (código de estado 200)
 
 model = load_model('modelo_entrenado.h5')
+
 app = Flask(__name__, template_folder="templates/")
 palabras = ["Persona", "Hombre", "Mujer","Perro", "Gato","Vaca", "Caballo", "Tigre", "Pasto", "Flor", "Fruta", "Árbol", "Hoja",
           "Raíz", "Flor de Cerezo", "Ciruela", "Sol", "Luna", "Estrella", "Luvia", "Nieve", "Trueno", "Cielo", "Rojo", "Azul",
