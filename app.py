@@ -6,25 +6,9 @@ import base64
 from skimage.transform import resize
 import numpy as np
 import random as rd
-from keras.models import load_model
-
-import gdown
-
-# Reemplaza el enlace con el enlace de descarga directa de tu archivo en Google Drive
-enlace_google_drive = "https://drive.google.com/uc?id=18WnNN9Qk1oRH2F7d9ojBAsQLcKGiN6ks"
-# Especifica el nombre del archivo local
-nombre_archivo_local = "modelo_entrenado.h5"
-
-# Realiza la solicitud para descargar el archivo
-response = gdown.download(enlace_google_drive, nombre_archivo_local, quiet=False)
-
-# Verifica si la descarga fue exitosa (código de estado 200)
-
-
+from tensorflow.keras.models import load_model
 
 model = load_model('modelo_entrenado.h5')
-
-
 app = Flask(__name__, template_folder="templates/")
 palabras = ["Persona", "Hombre", "Mujer","Perro", "Gato","Vaca", "Caballo", "Tigre", "Pasto", "Flor", "Fruta", "Árbol", "Hoja",
           "Raíz", "Flor de Cerezo", "Ciruela", "Sol", "Luna", "Estrella", "Luvia", "Nieve", "Trueno", "Cielo", "Rojo", "Azul",
@@ -98,6 +82,9 @@ def main():
     word = palabras[rd.randint(0,49)]
     size = len(traduccion[word])
     return render_template("index.html", word=word,len=size)
+@app.route("/help")
+def help():
+    return render_template("help.html")
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -105,31 +92,31 @@ def predict():
     indices = []
     l = request.form.get('size')
     word = request.form.get('word')
-    try:
-        for i in range(int(l)):
-            img_data = request.form.get('myImage_'+str(i)).replace("data:image/png;base64,", "")
-            imagenes.append(img_data)
-            with tempfile.NamedTemporaryFile(delete=False, mode="w+b", suffix='.png', dir=str('predicciones')) as fh:
-                fh.write(base64.b64decode(img_data))
-                tmp_file_path = fh.name
-            imagen = io.imread(tmp_file_path)
-            imagen = imagen[:, :, 3]
-            size = (28, 28)
-            image = imagen / 255.0
-            im = resize(image, size)
-            im = im[:, :, np.newaxis]
-            im = im.reshape(1, *im.shape)
-            salida = model.predict(im)[0]
-            os.remove(tmp_file_path)
-            nums = salida*100
-            numeros_formateados = [f'{numero:.2f}' for numero in nums]
-            maximum = max(numeros_formateados)
-            indice = numeros_formateados.index(maximum)
-            indices.append(indice)  
-        return redirect(url_for('predicciones', index=indices, img_data=imagenes, word=word))
-    except:
-        print("Error occurred")
-        return redirect("/", code=302)
+
+    for i in range(int(l)):
+        img_data = request.form.get('myImage_'+str(i)).replace("data:image/png;base64,", "")
+        imagenes.append(img_data)
+        with tempfile.NamedTemporaryFile(delete=False, mode="w+b", suffix='.png', dir=str('predicciones')) as fh:
+            fh.write(base64.b64decode(img_data))
+            tmp_file_path = fh.name
+        imagen = io.imread(tmp_file_path)
+        imagen = imagen[:, :, 3]
+        size = (28, 28)
+        image = imagen / 255.0
+        im = resize(image, size)
+        im = im[:, :, np.newaxis]
+        im = im.reshape(1, *im.shape)
+        salida = model.predict(im)[0]
+        os.remove(tmp_file_path)
+        nums = salida*100
+        numeros_formateados = [f'{numero:.2f}' for numero in nums]
+        maximum = max(numeros_formateados)
+        indice = numeros_formateados.index(maximum)
+        indices.append(indice)  
+    return redirect(url_for('predicciones', index=indices, img_data=imagenes, word=word))
+
+    print("Error occurred")
+    return redirect("/", code=302)
 
 @app.route('/predicciones')
 def predicciones():
