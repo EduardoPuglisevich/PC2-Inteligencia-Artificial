@@ -1,0 +1,48 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-image: url(../img/bg.png);
+}
+#img-upc{
+    width:3rem;
+    height:3rem;
+}
+.navbar-brand{
+    padding-left: 15px;
+}
+.nav-item{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+h1{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    border-color: cadetblue;
+    border-style: double;
+}
+.contenedor {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+}
+footer{
+    width:100%;
+    background:rgb(193, 234, 255);
+}

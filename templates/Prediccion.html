@@ -1,0 +1,53 @@
+{% extends "layoutPredict.html" %}
+{% block navbar %}
+<ul class="navbar-nav ms-auto">
+    <li class="nav-item">
+      <a class="nav-link active text-white" aria-current="page" href="{{ url_for('main') }}">
+        <i class="fa-solid fa-house"></i>
+        Inicio
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" href="{{ url_for('help') }}">
+        <i class="fa-solid fa-question" style="color: #ffffff;"></i>
+        Ayuda
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" href="">
+        <i class="fa-solid fa-users"></i>
+        Nosotros
+      </a>
+    </li>
+  </ul>
+{% endblock %}
+{% block content %}
+<div class="contenedor2">
+    <!--
+  <div>
+        <h1>Figura dibujada</h1>
+        {% for img in img_data %}
+          <img src="data:image/png;base64,{{ img }}" style="border:2px solid black; background-color: white;" alt="fruta" >
+        {% endfor %}
+    <div>
+    -->
+    
+  <div>
+    <h1>Palabra pedida: {{word}}</h1>
+  <div>
+  <ul>
+      {% for i in range(l) %}
+        {% if SE[i] == SI[i] %}
+          <li>Silaba esperada: {{ SE[i] }} / Silaba Escrita: {{ SI[i] }} <span style="color: rgb(6, 236, 6);">Correcto</span></li>
+        {% else %}
+          <li>Silaba esperada: {{ SE[i] }} / Silaba Escrita: {{ SI[i] }} <span style="color: rgb(239, 7, 7);">Incorrecto</span></li>
+        {% endif %}
+      {% endfor %}
+  </ul>
+  <div class="center">
+      <a href="/"><button class="button" style="background-color: red;">Ir a la página principal</button></a>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
